@@ -81,7 +81,7 @@ $fullname = isset($_SESSION['fullname']) ? htmlspecialchars($_SESSION['fullname'
   <!-- Navbar -->
   <nav class="navbar navbar-expand-lg sticky-top">
     <div class="container">
-      <a class="navbar-brand" href="#">
+      <a class="navbar-brand" href="index.php">
         <i class="fas fa-id-card"></i> E-License
       </a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -93,10 +93,7 @@ $fullname = isset($_SESSION['fullname']) ? htmlspecialchars($_SESSION['fullname'
             <a class="nav-link active" href="index.php">Home</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link active" href="dashboard.php">Dashboard</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link active" href="index.php">Contact</a>
+            <a class="nav-link active" href="dashboard.php">My Dashboard</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="#">Profile</a>

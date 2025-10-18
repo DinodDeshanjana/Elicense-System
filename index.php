@@ -1,6 +1,7 @@
 <?php
-// Start the session on the very first line.
+
 session_start();
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -30,11 +31,13 @@ session_start();
         --dark-blue: #0043a6;
         --light-blue: #e3f2fd;
       }
-      * { margin: 0; padding: 0; box-sizing: border-box; }
+
+      * { margin: 0; padding: 0; box-sizing: border-box;
+    ``}
       body { 
         font-family: 'Poppins', sans-serif;
         overflow-x: hidden; 
-        scroll-padding-top: 80px; /* Add padding for fixed navbar */
+        scroll-padding-top: 80px;
       }
       .navbar { 
         background: white; 
@@ -59,17 +62,17 @@ session_start();
       .service-card:hover { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
       .btn-login a, .btn-light a { text-decoration: none !important; color: inherit; }
       
-      /* Fix for smooth scrolling and section positioning */
+      
       html {
         scroll-behavior: smooth;
       }
       
-      /* Add padding to sections to account for fixed navbar */
+     
       section {
         scroll-margin-top: 80px;
       }
       
-      /* Style for the image */
+ 
       .styled-image {
         max-width: 100%;
         height: auto;
@@ -87,8 +90,8 @@ session_start();
       border-radius: 50px;
       transition: all 0.3s ease;
       border: none;
-      text-decoration: none; /* remove underline from link */
-      display: inline-block; /* correct alignment */
+      text-decoration: none; 
+      display: inline-block;
     }
         .btn-logout:hover {
       background-color: #c82333;
@@ -96,6 +99,7 @@ session_start();
       transform: translateY(-2px);
     }
     </style>
+
   </head>
   <body>
     <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
@@ -127,11 +131,11 @@ session_start();
             </li>
           </ul>
           
-          <!-- DYNAMIC BUTTONS START -->
+         
           <div class="ms-3 d-flex gap-2">
             <?php if (isset($_SESSION['user_id'])): ?>
               <?php
-                // Determine the correct dashboard link based on the user's role
+                
                 $dashboard_link = ($_SESSION['role'] === 'admin') ? 'admin_dashboard.php' : 'dashboard.php';
               ?>
               <a href="<?php echo $dashboard_link; ?>" class="btn btn-light">My Dashboard</a>
@@ -141,7 +145,7 @@ session_start();
               <a href="register.php" class="btn btn-login">Sign Up</a>
             <?php endif; ?>
           </div>
-          <!-- DYNAMIC BUTTONS END -->
+       
 
         </div>
       </div>
@@ -150,7 +154,7 @@ session_start();
     <section class="hero-section" id="home">
       <div class="container">
         <div class="row align-items-center">
-          <!-- DYNAMIC HERO CONTENT START -->
+         
           <?php if (isset($_SESSION['user_id'])): ?>
             <div class="col-lg-6">
                 <h1 class="display-4 fw-bold mb-4">
@@ -179,7 +183,7 @@ session_start();
                 </div>
             </div>
           <?php endif; ?>
-          <!-- DYNAMIC HERO CONTENT END -->
+          
           <div class="col-lg-6 text-center">
             <img src="image01.png" alt="E-License Services Illustration" class="styled-image" width="390">
           </div>
@@ -195,21 +199,21 @@ session_start();
                   <p class="lead text-muted">Comprehensive resources for your driving license journey.</p>
               </div>
           </div>
-          <!-- MODIFIED ROW: Removed one card and adjusted grid columns -->
+        
           <div class="row g-4 justify-content-center">
-              <!-- Card 1: Main Application -->
+          
               <div class="col-md-6 col-lg-4">
                   <div class="card service-card h-100">
                       <div class="card-body text-center p-4 d-flex flex-column">
                           <i class="bi bi-person-badge text-primary" style="font-size: 2.5rem;"></i>
                           <h5 class="card-title mt-3">Driver's License Application</h5>
                           <p class="card-text">Apply online for your new driver's license with our easy-to-use system.</p>
-                          <a href="register.php" class="btn btn-primary mt-auto">Get Started</a>
+                          <a href="applyexam.php" class="btn btn-primary mt-auto">Get Started</a>
                       </div>
                   </div>
               </div>
               
-              <!-- Card 2: Written Exam Guide -->
+              
               <div class="col-md-6 col-lg-4">
                   <div class="card service-card h-100">
                        <div class="card-body text-center p-4 d-flex flex-column">
@@ -221,7 +225,7 @@ session_start();
                   </div>
               </div>
 
-              <!-- Card 3: Road Safety & Guidelines -->
+          
               <div class="col-md-6 col-lg-4">
                   <div class="card service-card h-100">
                        <div class="card-body text-center p-4 d-flex flex-column">
@@ -282,10 +286,10 @@ session_start();
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
     ></script>
 
-    <!-- Optional: JavaScript to handle smooth scrolling with offset -->
+   
     <script>
       document.addEventListener('DOMContentLoaded', function() {
-        // Add smooth scrolling to all links
+      
         const navLinks = document.querySelectorAll('a.nav-link[href^="#"]');
         
         for (let link of navLinks) {
@@ -296,7 +300,7 @@ session_start();
             const targetElement = document.querySelector(targetId);
             
             if (targetElement) {
-              // Calculate the position with offset for fixed navbar
+             
               const navbarHeight = document.querySelector('.navbar').offsetHeight;
               const targetPosition = targetElement.offsetTop - navbarHeight;
               

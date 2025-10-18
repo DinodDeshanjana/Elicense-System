@@ -150,7 +150,7 @@ $conn->close();
         </div>
       </form>
       <div class="text-center mt-3 back-link">
-        <a href="index.html" class="mb-0 text-decoration-none"><i class="bi bi-arrow-left-circle"></i> Back to Home</a>
+        <a href="index.php" class="mb-0 text-decoration-none"><i class="bi bi-arrow-left-circle"></i> Back to Home</a>
       </div>
     </div>
   </div>

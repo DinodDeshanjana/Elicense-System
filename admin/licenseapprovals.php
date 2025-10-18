@@ -1,30 +1,20 @@
 <?php
-/**
- * E-License System | ADMIN - License Approvals
- *
- * - Allows admins to issue new licenses to users who have passed their exams.
- * - Allows admins to update the status of existing licenses.
- * - Protected page: only accessible to users with the 'admin' role.
- */
 
 session_start();
 require 'dbconnection.php';
 
-// --- SECURITY CHECK ---
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
     $_SESSION['error_message'] = "You do not have permission to access this page.";
     header("Location: login.php");
     exit();
 }
 
-
-// --- ACTION HANDLING ---
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // ACTION 1: Issue a new license for a passed user
+
     if (isset($_POST['issue_license'])) {
         $user_id_to_issue = $_POST['user_id'];
 
-        // Prepare INSERT statement
+
         $sql = "INSERT INTO licenses (user_id, issue_date, status) VALUES (?, CURDATE(), 'Processing')";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("i", $user_id_to_issue);
@@ -37,12 +27,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->close();
     }
 
-    // ACTION 2: Update the status of an existing license
     if (isset($_POST['update_status'])) {
         $license_id_to_update = $_POST['license_id'];
         $new_status = $_POST['new_status'];
         
-        // Basic validation for allowed statuses
+
         $allowed_statuses = ['Processing', 'Ready for Collection', 'Collected'];
         if (in_array($new_status, $allowed_statuses)) {
             $sql = "UPDATE licenses SET status = ? WHERE license_id = ?";
@@ -60,14 +49,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-    // Redirect back to the same page to prevent form resubmission
     header("Location: licenseapprovals.php");
     exit();
 }
 
 
-// --- DATA FETCHING ---
-// Get all users who have passed an exam, and join their license status if it exists.
+
 $applicants = [];
 $sql = "SELECT 
             u.user_id, 
@@ -101,8 +88,21 @@ $conn->close();
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>License Approvals</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+        body {
+      background-color: #f4f6f9;
+      font-family: 'Poppins', sans-serif;
+    }
+  </style>
 </head>
 <body style="background-color:#f4f6f9;">
+
+<?php include "adminnavigation.php"?>
+
   <div class="container py-5">
     <h3 class="text-center text-primary mb-4">License Approval Panel</h3>
     

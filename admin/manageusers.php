@@ -1,16 +1,9 @@
 <?php
-/**
- * E-License System | ADMIN - Manage Users
- *
- * - Allows admins to view a list of all registered users.
- * - Allows admins to delete users (but not other admins).
- * - Protected page: only accessible to users with the 'admin' role.
- */
 
 session_start();
 require 'dbconnection.php';
 
-// --- SECURITY CHECK ---
+
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
     $_SESSION['error_message'] = "You do not have permission to access this page.";
     header("Location: login.php");
@@ -19,15 +12,15 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
 
 $current_admin_id = $_SESSION['user_id'];
 
-// --- ACTION HANDLING (Delete User) ---
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_user'])) {
     $user_id_to_delete = $_POST['user_id'];
 
-    // Security check: Admins cannot delete themselves or other admins.
+
     if ($user_id_to_delete == $current_admin_id) {
         $_SESSION['error_message'] = "You cannot delete your own account.";
     } else {
-        // First, verify the user to be deleted is not an admin
+
         $sql_check_role = "SELECT role FROM users WHERE user_id = ?";
         $stmt_check = $conn->prepare($sql_check_role);
         $stmt_check->bind_param("i", $user_id_to_delete);
@@ -39,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_user'])) {
         if ($user_role === 'admin') {
             $_SESSION['error_message'] = "Admins cannot be deleted from this panel.";
         } else {
-            // Proceed with deletion
+       
             $sql_delete = "DELETE FROM users WHERE user_id = ?";
             $stmt_delete = $conn->prepare($sql_delete);
             $stmt_delete->bind_param("i", $user_id_to_delete);
@@ -53,14 +46,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_user'])) {
         }
     }
 
-    // Redirect back to the same page
+
     header("Location: manageusers.php.php");
     exit();
 }
 
 
-// --- DATA FETCHING ---
-// Fetch all users from the database
+
 $users = [];
 $sql = "SELECT user_id, fullname, email, nic, role FROM users ORDER BY FIELD(role, 'admin', 'user'), user_id ASC";
 $result = $conn->query($sql);
@@ -79,12 +71,26 @@ $conn->close();
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Manage Users</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+        body {
+      background-color: #f4f6f9;
+      font-family: 'Poppins', sans-serif;
+    }
+  </style>
 </head>
 <body style="background-color:#f4f6f9;">
+
+<?php include "adminnavigation.php"?>
+
   <div class="container py-5">
     <h3 class="text-center text-primary mb-4">User Management</h3>
     
-    <!-- Session Message Display -->
+
     <?php if (isset($_SESSION['success_message'])): ?>
         <div class="alert alert-success alert-dismissible fade show" role="alert">
             <?php echo $_SESSION['success_message']; unset($_SESSION['success_message']); ?>

@@ -1,22 +1,15 @@
 <?php
-/**
- * E-License System | ADMIN - Add/Update Exam Results
- *
- * - Allows admins to enter Pass/Fail results for users with 'Approved' applications.
- * - Protected page: only accessible to users with the 'admin' role.
- */
 
 session_start();
 require 'dbconnection.php';
 
-// --- SECURITY CHECK ---
-// 1. Check if a user is logged in.
+
 if (!isset($_SESSION['user_id'])) {
     $_SESSION['error_message'] = "Please log in to access the admin panel.";
     header("Location: login.php");
     exit();
 }
-// 2. Check if the logged-in user is an admin.
+
 if ($_SESSION['role'] !== 'admin') {
     $_SESSION['error_message'] = "You do not have permission to access this page.";
     header("Location: dashboard.php");
@@ -24,17 +17,17 @@ if ($_SESSION['role'] !== 'admin') {
 }
 
 
-// --- ACTION HANDLING (Save Result) ---
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_result'])) {
     $application_id = $_POST['application_id'];
     $exam_date = $_POST['exam_date'];
-    $result_status = $_POST['result']; // 'Pass' or 'Fail'
+    $result_status = $_POST['result'];
 
-    // Simple validation
+
     if (empty($application_id) || empty($exam_date) || empty($result_status)) {
         $_SESSION['error_message'] = "All fields are required to save a result.";
     } else {
-        // Prepare a secure SQL statement to INSERT the result
+  
         $sql = "INSERT INTO exam_results (application_id, exam_date, result) VALUES (?, ?, ?)";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("iss", $application_id, $exam_date, $result_status);
@@ -42,8 +35,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_result'])) {
         if ($stmt->execute()) {
             $_SESSION['success_message'] = "Result for Application #" . $application_id . " has been saved.";
         } else {
-            // Check for duplicate entry error
-            if ($conn->errno == 1062) { // 1062 is the MySQL error code for duplicate entry
+
+            if ($conn->errno == 1062) { 
                  $_SESSION['error_message'] = "A result for this application already exists.";
             } else {
                 $_SESSION['error_message'] = "Error saving result: " . $stmt->error;
@@ -51,15 +44,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_result'])) {
         }
         $stmt->close();
     }
-    
-    // Redirect back to the same page to prevent form resubmission
+
     header("Location: examresult.php");
     exit();
 }
 
 
-// --- DATA FETCHING ---
-// Fetch all 'Approved' applications and join with users and results tables
 $applicants = [];
 $sql = "SELECT 
             ea.application_id,
@@ -75,7 +65,7 @@ $sql = "SELECT
         WHERE 
             ea.status = 'Approved'
         ORDER BY
-            -- Show applicants who need a result at the top
+            
             CASE WHEN er.result_id IS NULL THEN 0 ELSE 1 END, 
             ea.application_id DESC";
 
@@ -95,12 +85,29 @@ $conn->close();
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Add Exam Results</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+
+        body {
+      background-color: #f4f6f9;
+      font-family: 'Poppins', sans-serif;
+      
+    }
+
+  </style>
 </head>
 <body style="background-color:#f4f6f9;">
+
+  <?php include "adminnavigation.php"?>
+
   <div class="container py-5">
     <h3 class="text-center text-primary mb-4">Add / Update Exam Results</h3>
     
-    <!-- Session Message Display -->
+
     <?php if (isset($_SESSION['success_message'])): ?>
         <div class="alert alert-success alert-dismissible fade show" role="alert">
             <?php echo $_SESSION['success_message']; ?>
