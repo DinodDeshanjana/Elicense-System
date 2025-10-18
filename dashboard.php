@@ -38,9 +38,18 @@ $fullname = isset($_SESSION['fullname']) ? htmlspecialchars($_SESSION['fullname'
 
   <style>
     body {
-      background-color: #f4f6f9;
-      font-family: 'Poppins', sans-serif;
-    }
+  background-color: #f4f6f9;
+  font-family: 'Poppins', sans-serif;
+  min-height: 100vh;
+  position: relative;
+  padding-bottom: 80px; /* Adjust based on footer height */
+}
+
+footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+}
     .navbar {
       background: white;
       box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
@@ -99,29 +108,7 @@ $fullname = isset($_SESSION['fullname']) ? htmlspecialchars($_SESSION['fullname'
 </head>
 <body>
 
-  <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg sticky-top">
-    <div class="container">
-      <a class="navbar-brand" href="#">
-        <i class="fas fa-id-card"></i> E-License
-      </a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav ms-auto">
-          <li class="nav-item">
-            <a class="nav-link active" href="dashboard.php">Dashboard</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Profile</a>
-          </li>
-        </ul>
-        <!-- Correct logout button -->
-        <a href="logout.php" class="btn-logout ms-3">Logout</a>
-      </div>
-    </div>
-  </nav>
+ <?php include "usernavigation.php"; ?>
 
   <!-- Dashboard -->
   <div class="container py-5">

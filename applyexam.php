@@ -93,7 +93,19 @@ $conn->close();
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
   <style>
-    body { background-color: #f8f9fa; }
+ body {
+  background-color: #f4f6f9;
+  font-family: 'Poppins', sans-serif;
+  min-height: 100vh;
+  position: relative;
+  padding-bottom: 80px; /* Adjust based on footer height */
+}
+
+footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+}
     .card {
       border: none;
       border-radius: 15px;
@@ -103,9 +115,53 @@ $conn->close();
     }
     .btn-custom { background-color: #007bff; color: #fff; }
     .btn-custom:hover { background-color: #0056b3; }
+    .navbar {
+      background: white;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      padding: 1rem 0;
+    }
+    .navbar-brand {
+      font-weight: 700;
+      font-size: 1.5rem;
+      color: #333 !important;
+    }
+    .navbar-brand i {
+      margin-right: 0.5rem;
+      color: #007bff;
+    }
+    .nav-link {
+      color: rgba(12, 12, 12, 0.8) !important;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      margin: 0 0.5rem;
+      font-size: 1rem;
+    }
+    .nav-link:hover {
+      color: #007bff !important;
+      transform: translateY(-2px);
+    }
+    .btn-logout {
+      background-color: #dc3545;
+      color: white;
+      font-weight: bold;
+      padding: 0.5rem 1.5rem;
+      border-radius: 50px;
+      transition: all 0.3s ease;
+      border: none;
+      text-decoration: none; /* remove underline from link */
+      display: inline-block; /* correct alignment */
+    }
+    .btn-logout:hover {
+      background-color: #c82333;
+      color: white;
+      transform: translateY(-2px);
+    }
   </style>
 </head>
 <body>
+
+ <?php include "usernavigation.php"; ?>
+
 <div class="container mt-5">
   <div class="card p-4 p-md-5">
     <h3 class="text-center mb-3 text-primary">Apply for Driving Exam</h3>
@@ -150,5 +206,12 @@ $conn->close();
     </div>
   </div>
 </div>
+
+ <footer class="bg-dark text-light py-4 mt-5">
+    <div class="container text-center">
+      <p class="mb-0">&copy; <?php echo date("Y"); ?> E-License System | Developed by Dinod Deshanjana</p>
+    </div>
+  </footer>
+
 </body>
 </html>

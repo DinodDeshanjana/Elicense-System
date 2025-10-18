@@ -18,7 +18,9 @@ session_start();
       rel="stylesheet"
     />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
-
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
       :root {
         --primary-blue: #0d6efd;
@@ -30,7 +32,7 @@ session_start();
       }
       * { margin: 0; padding: 0; box-sizing: border-box; }
       body { 
-        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif; 
+        font-family: 'Poppins', sans-serif;
         overflow-x: hidden; 
         scroll-padding-top: 80px; /* Add padding for fixed navbar */
       }
@@ -41,7 +43,7 @@ session_start();
       }
       .navbar-brand { font-weight: 700; font-size: 1.5rem; color: rgb(8, 8, 8) !important; }
       .navbar-brand i { margin-right: 0.5rem; }
-      .nav-link { color: rgba(12, 12, 12, 0.8) !important; font-weight: bold; transition: all 0.3s ease; margin: 0 0.5rem; font-size: 18px; }
+      .nav-link { color: rgba(12, 12, 12, 0.8) !important; font-weight: 600; transition: all 0.3s ease; margin: 0 0.5rem; font-size: 1rem; }
       .nav-link:hover { color: rgb(14, 163, 255) !important; transform: translateY(-2px); }
       .btn-login { background-color: rgb(20, 93, 251); color: white; font-weight: bold; padding: 0.5rem 1.5rem; border-radius: 60px; transition: all 0.3s ease; }
       .btn-login:hover { background-color: #7ebbfc; transform: translateY(-2px); }
@@ -73,6 +75,26 @@ session_start();
         height: auto;
        
       }
+        .navbar-brand i {
+      margin-right: 0.5rem;
+      color: #007bff;
+    }
+    .btn-logout {
+      background-color: #dc3545;
+      color: white;
+      font-weight: bold;
+      padding: 0.5rem 1.5rem;
+      border-radius: 50px;
+      transition: all 0.3s ease;
+      border: none;
+      text-decoration: none; /* remove underline from link */
+      display: inline-block; /* correct alignment */
+    }
+        .btn-logout:hover {
+      background-color: #c82333;
+      color: white;
+      transform: translateY(-2px);
+    }
     </style>
   </head>
   <body>
@@ -113,7 +135,7 @@ session_start();
                 $dashboard_link = ($_SESSION['role'] === 'admin') ? 'admin_dashboard.php' : 'dashboard.php';
               ?>
               <a href="<?php echo $dashboard_link; ?>" class="btn btn-light">My Dashboard</a>
-              <a href="logout.php" class="btn btn-login">Logout</a>
+              <a href="logout.php" class="btn-logout btn-login">Logout</a>
             <?php else: ?>
               <a href="login.php" class="btn btn-login">Login</a>
               <a href="register.php" class="btn btn-login">Sign Up</a>
