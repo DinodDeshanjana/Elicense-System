@@ -3,8 +3,7 @@
  * E-License System | Exam Application Status
  *
  * - Fetches and displays all exam applications for the logged-in user.
- * - Shows the status (Pending, Approved, Rejected) with color-coded badges.
- * - Protected page: only accessible to logged-in users.
+ * - Shows the status and the scheduled exam date if approved.
  */
 
 // Must be the very first line to use sessions
@@ -18,14 +17,15 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 // Include the database connection file.
-require 'dbconnection.php';
+require 'dbconnection.php'; // Corrected filename
 
 // Get the logged-in user's ID
 $user_id = $_SESSION['user_id'];
 
-// Fetch all exam applications for this user from the database
+// --- MODIFICATION 1: UPDATE SQL QUERY ---
+// Fetch all exam applications for this user, including the new scheduled_exam_date
 $applications = [];
-$sql = "SELECT application_id, exam_type, applied_date, status 
+$sql = "SELECT application_id, exam_type, applied_date, scheduled_exam_date, status 
         FROM exam_applications 
         WHERE user_id = ? 
         ORDER BY applied_date DESC";
@@ -50,20 +50,15 @@ $conn->close();
   <title>Exam Status - E-License</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
-body {
-  background-color: #f4f6f9;
-  font-family: 'Poppins', sans-serif;
-  min-height: 100vh;
-  position: relative;
-  padding-bottom: 80px; /* Adjust based on footer height */
-}
-
-footer {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-}
+    body {
+      background-color: #f4f6f9;
+      font-family: 'Poppins', sans-serif;
+      min-height: 100vh;
+      position: relative;
+      padding-bottom: 80px; /* Adjust based on footer height */
+    }
     .card {
       border: none;
       border-radius: 15px;
@@ -78,15 +73,21 @@ footer {
     .table-hover tbody tr:hover {
         background-color: #f1f1f1;
     }
+    footer {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+    }
   </style>
 </head>
 <body>
 
- <?php include "usernavigation.php"; ?>
+  <?php include "usernavigation.php"; ?>
+
 <div class="container mt-5">
   <div class="card p-4 p-md-5">
     <h3 class="text-center text-primary mb-3">Exam Application Status</h3>
-    <p class="text-center text-muted mb-4">Check the status of your submitted exam applications.</p>
+    <p class="text-center text-muted mb-4">Check the status and scheduled date of your exam applications.</p>
 
     <div class="table-responsive">
         <table class="table table-hover text-center align-middle">
@@ -95,13 +96,16 @@ footer {
             <th>Application ID</th>
             <th>Exam Type</th>
             <th>Date Applied</th>
+            <!-- MODIFICATION 2: ADD NEW TABLE HEADER -->
+            <th>Scheduled Exam Date</th>
             <th>Status</th>
           </tr>
         </thead>
         <tbody>
           <?php if (empty($applications)): ?>
             <tr>
-              <td colspan="4" class="text-center text-muted p-4">You have not submitted any applications yet.</td>
+              <!-- MODIFICATION 3: INCREASE COLSPAN -->
+              <td colspan="5" class="text-center text-muted p-4">You have not submitted any applications yet.</td>
             </tr>
           <?php else: ?>
             <?php foreach ($applications as $app): ?>
@@ -109,6 +113,18 @@ footer {
                 <td><?php echo 'APP-' . htmlspecialchars($app['application_id']); ?></td>
                 <td><?php echo htmlspecialchars(ucfirst($app['exam_type'])); ?></td>
                 <td><?php echo htmlspecialchars($app['applied_date']); ?></td>
+                <!-- MODIFICATION 4: DISPLAY THE SCHEDULED DATE -->
+                <td>
+                    <?php 
+                      if ($app['scheduled_exam_date']) {
+                          // If a date exists, display it
+                          echo htmlspecialchars($app['scheduled_exam_date']);
+                      } else {
+                          // If no date (NULL), show N/A
+                          echo '<span class="text-muted">N/A</span>';
+                      }
+                    ?>
+                </td>
                 <td>
                   <?php
                     // Set a different badge color based on the status
@@ -149,3 +165,4 @@ footer {
 
 </body>
 </html>
+

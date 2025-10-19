@@ -99,7 +99,7 @@ footer {
           <tr>
             <th>Application ID</th>
             <th>Exam Type</th>
-            <th>Exam Date</th>
+            
             <th>Result</th>
           </tr>
         </thead>
@@ -113,7 +113,7 @@ footer {
               <tr>
                 <td><?php echo 'APP-' . htmlspecialchars($res['application_id']); ?></td>
                 <td><?php echo htmlspecialchars(ucfirst($res['exam_type'])); ?></td>
-                <td><?php echo htmlspecialchars($res['exam_date']); ?></td>
+                
                 <td>
                   <?php
                     // Set a different badge color based on the result

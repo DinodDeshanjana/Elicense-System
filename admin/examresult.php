@@ -17,45 +17,48 @@ if ($_SESSION['role'] !== 'admin') {
 }
 
 
-
+// --- MODIFICATION 1: SIMPLIFY FORM HANDLING ---
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_result'])) {
     $application_id = $_POST['application_id'];
-    $exam_date = $_POST['exam_date'];
+    // $exam_date variable is removed
     $result_status = $_POST['result'];
 
-
-    if (empty($application_id) || empty($exam_date) || empty($result_status)) {
-        $_SESSION['error_message'] = "All fields are required to save a result.";
+    // Updated validation
+    if (empty($application_id) || empty($result_status)) {
+        $_SESSION['error_message'] = "A result must be selected to save.";
     } else {
-  
-        $sql = "INSERT INTO exam_results (application_id, exam_date, result) VALUES (?, ?, ?)";
+        
+        // --- MODIFICATION 2: USE CURDATE() in SQL ---
+        // The query now automatically saves the current date as the exam_date
+        $sql = "INSERT INTO exam_results (application_id, exam_date, result) VALUES (?, CURDATE(), ?)";
         $stmt = $conn->prepare($sql);
-        $stmt->bind_param("iss", $application_id, $exam_date, $result_status);
+        // The bind_param is updated to match the new query (integer, string)
+        $stmt->bind_param("is", $application_id, $result_status);
 
         if ($stmt->execute()) {
             $_SESSION['success_message'] = "Result for Application #" . $application_id . " has been saved.";
         } else {
-
             if ($conn->errno == 1062) { 
-                 $_SESSION['error_message'] = "A result for this application already exists.";
+                $_SESSION['error_message'] = "A result for this application already exists.";
             } else {
                 $_SESSION['error_message'] = "Error saving result: " . $stmt->error;
             }
         }
         $stmt->close();
     }
-
+    
     header("Location: examresult.php");
     exit();
 }
 
 
+// --- MODIFICATION 3: SIMPLIFY DATA FETCHING ---
 $applicants = [];
 $sql = "SELECT 
             ea.application_id,
             u.fullname,
-            er.exam_date,
-            er.result
+            er.result,
+            er.exam_date -- Still fetch the date to display for already saved results
         FROM 
             exam_applications AS ea
         JOIN 
@@ -65,7 +68,6 @@ $sql = "SELECT
         WHERE 
             ea.status = 'Approved'
         ORDER BY
-            
             CASE WHEN er.result_id IS NULL THEN 0 ELSE 1 END, 
             ea.application_id DESC";
 
@@ -89,47 +91,40 @@ $conn->close();
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-
   <style>
-
-        body {
-      background-color: #f4f6f9;
-      font-family: 'Poppins', sans-serif;
-      
-    }
-
+      body {
+          background-color: #f4f6f9;
+          font-family: 'Poppins', sans-serif;
+      }
   </style>
 </head>
 <body style="background-color:#f4f6f9;">
 
-  <?php include "adminnavigation.php"?>
+  <?php include "adminnavigation.php" ?>
 
   <div class="container py-5">
     <h3 class="text-center text-primary mb-4">Add / Update Exam Results</h3>
     
-
     <?php if (isset($_SESSION['success_message'])): ?>
         <div class="alert alert-success alert-dismissible fade show" role="alert">
-            <?php echo $_SESSION['success_message']; ?>
+            <?php echo $_SESSION['success_message']; unset($_SESSION['success_message']); ?>
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
-        <?php unset($_SESSION['success_message']); ?>
     <?php endif; ?>
     <?php if (isset($_SESSION['error_message'])): ?>
         <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            <?php echo $_SESSION['error_message']; ?>
+            <?php echo $_SESSION['error_message']; unset($_SESSION['error_message']); ?>
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
-        <?php unset($_SESSION['error_message']); ?>
     <?php endif; ?>
 
     <div class="table-responsive bg-white shadow rounded p-3">
       <table class="table table-hover align-middle">
         <thead class="table-primary">
+          <!-- MODIFICATION 4: REMOVE EXAM DATE HEADER -->
           <tr>
             <th>App ID</th>
             <th>User Name</th>
-            <th>Exam Date</th>
             <th>Result</th>
             <th>Action</th>
           </tr>
@@ -137,7 +132,7 @@ $conn->close();
         <tbody>
           <?php if (empty($applicants)): ?>
             <tr>
-              <td colspan="5" class="text-center text-muted p-4">No approved applications found.</td>
+              <td colspan="4" class="text-center text-muted p-4">No approved applications found.</td>
             </tr>
           <?php else: ?>
             <?php foreach ($applicants as $applicant): ?>
@@ -150,11 +145,10 @@ $conn->close();
                   <td><?php echo htmlspecialchars($applicant['fullname']); ?></td>
                   
                   <?php if (is_null($applicant['result'])): // If result is not yet saved ?>
-                    <td>
-                      <input type="date" name="exam_date" class="form-control form-control-sm" style="width:150px;" required>
-                    </td>
+                    <!-- The date input field is now completely removed -->
                     <td>
                       <select name="result" class="form-select form-select-sm" style="width:120px;" required>
+                        <option value="" disabled selected>Select...</option>
                         <option value="Pass">Pass</option>
                         <option value="Fail">Fail</option>
                       </select>
@@ -163,7 +157,6 @@ $conn->close();
                       <button type="submit" name="save_result" class="btn btn-primary btn-sm">Save</button>
                     </td>
                   <?php else: // If result is already saved ?>
-                    <td><?php echo htmlspecialchars($applicant['exam_date']); ?></td>
                     <td>
                       <?php
                         $result_status = htmlspecialchars($applicant['result']);
@@ -175,7 +168,6 @@ $conn->close();
                       <button class="btn btn-secondary btn-sm" disabled>Saved</button>
                     </td>
                   <?php endif; ?>
-
                 </form>
               </tr>
             <?php endforeach; ?>
@@ -188,4 +180,3 @@ $conn->close();
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
-
