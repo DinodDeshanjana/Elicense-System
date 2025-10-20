@@ -67,10 +67,10 @@ $sql = "SELECT
         JOIN exam_results er ON ea.application_id = er.application_id
         LEFT JOIN licenses l ON u.user_id = l.user_id AND l.license_id = (SELECT MAX(license_id) FROM licenses WHERE user_id = u.user_id)
         WHERE er.result = 'Pass'
-        GROUP BY u.user_id -- Show each passed user only once
+        GROUP BY u.user_id 
         ORDER BY 
-            CASE WHEN l.license_id IS NULL THEN 0 ELSE 1 END, -- Users needing a license appear first
-            FIELD(l.status, 'Processing', 'Ready for Collection', 'Collected'), -- Order by workflow
+            CASE WHEN l.license_id IS NULL THEN 0 ELSE 1 END, 
+            FIELD(l.status, 'Processing', 'Ready for Collection', 'Collected'), 
             l.issue_date DESC";
 
 $result = $conn->query($sql);
@@ -106,7 +106,6 @@ $conn->close();
   <div class="container py-5">
     <h3 class="text-center text-primary mb-4">License Approval Panel</h3>
     
-    <!-- Session Message Display -->
     <?php if (isset($_SESSION['success_message'])): ?>
         <div class="alert alert-success alert-dismissible fade show" role="alert">
             <?php echo $_SESSION['success_message']; unset($_SESSION['success_message']); ?>
@@ -150,13 +149,11 @@ $conn->close();
               </td>
               <td>
                 <?php if (is_null($applicant['license_id'])): ?>
-                  <!-- User has passed but has no license record -> Show "Issue License" button -->
                   <form action="licenseapprovals.php" method="POST">
                     <input type="hidden" name="user_id" value="<?php echo $applicant['user_id']; ?>">
                     <button type="submit" name="issue_license" class="btn btn-primary btn-sm">Issue License</button>
                   </form>
                 <?php elseif ($applicant['license_status'] !== 'Collected'): ?>
-                  <!-- License exists and is not yet collected -> Show status update form -->
                   <form action="licenseapprovals.php" method="POST" class="d-flex gap-2">
                     <input type="hidden" name="license_id" value="<?php echo $applicant['license_id']; ?>">
                     <select name="new_status" class="form-select form-select-sm" style="width: 200px;">
@@ -167,7 +164,6 @@ $conn->close();
                     <button type="submit" name="update_status" class="btn btn-success btn-sm">Update</button>
                   </form>
                 <?php else: ?>
-                  <!-- License is already collected -> Show disabled button -->
                   <button class="btn btn-secondary btn-sm" disabled>Completed</button>
                 <?php endif; ?>
               </td>

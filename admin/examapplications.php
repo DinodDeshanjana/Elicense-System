@@ -1,32 +1,23 @@
 <?php
-/**
- * examapplications.php
- * Admin Manage Exam Applications (with date scheduling)
- */
 
 session_start();
-require 'dbconnection.php'; // make sure this connects and $conn is mysqli object
+require 'dbconnection.php'; 
 
-// show errors in dev (comment out on production)
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-// --- SECURITY CHECK ---
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
     $_SESSION['error_message'] = "You do not have permission to access this page.";
     header("Location: login.php");
     exit();
 }
 
-// --- ACTION HANDLING ---
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['application_id'])) {
     $application_id = (int) $_POST['application_id'];
 
-    // Approve
     if (isset($_POST['approve'])) {
         $exam_date = isset($_POST['exam_date']) ? trim($_POST['exam_date']) : '';
 
-        // Server-side validation: non-empty and valid date (YYYY-MM-DD)
         if (empty($exam_date) || !preg_match('/^\d{4}-\d{2}-\d{2}$/', $exam_date)) {
             $_SESSION['error_message'] = "Please select a valid exam date before approving.";
         } else {
@@ -44,7 +35,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['application_id'])) {
             }
         }
     }
-    // Reject
     elseif (isset($_POST['reject'])) {
         $sql = "UPDATE exam_applications SET status = 'Rejected' WHERE application_id = ?";
         if ($stmt = $conn->prepare($sql)) {
@@ -60,12 +50,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['application_id'])) {
         }
     }
 
-    // redirect to avoid form re-submission and to show updated data
     header("Location: " . htmlspecialchars($_SERVER['PHP_SELF']));
     exit();
 }
 
-// --- FETCH DATA ---
 $applications = [];
 $sql = "SELECT 
             ea.application_id, 
@@ -89,7 +77,6 @@ if ($result = $conn->query($sql)) {
 
 $conn->close();
 
-// compute today's date for min attribute
 $today = date('Y-m-d');
 ?>
 <!doctype html>
@@ -156,7 +143,6 @@ $today = date('Y-m-d');
                       <span class="text-muted">N/A</span>
                     <?php endif; ?>
                   <?php else: ?>
-                    <!-- MOVED: Date input now here for pending apps -->
                     <input type="date" id="exam_date_<?php echo (int)$app['application_id']; ?>" data-app-id="<?php echo (int)$app['application_id']; ?>" class="form-control form-control-sm" style="width: 160px;" min="<?php echo $today; ?>" required>
                   <?php endif; ?>
                 </td>
@@ -171,12 +157,10 @@ $today = date('Y-m-d');
                 </td>
                 <td style="min-width: 200px;">
                   <?php if ($app['status'] === 'Pending'): ?>
-                    <!-- Separate form for Reject (no date needed) -->
                     <form id="rejectForm_<?php echo (int)$app['application_id']; ?>" method="post" style="display: inline;">
                       <input type="hidden" name="application_id" value="<?php echo (int)$app['application_id']; ?>">
                       <button type="submit" name="reject" class="btn btn-danger btn-sm">Reject</button>
                     </form>
-                    <!-- Approve button with JS onclick (submits date from above input) -->
                     <button type="button" class="btn btn-success btn-sm ms-1" onclick="approveApplication(<?php echo (int)$app['application_id']; ?>)">Approve</button>
                   <?php else: ?>
                     <button class="btn btn-secondary btn-sm" disabled><?php echo $status; ?></button>
@@ -192,7 +176,6 @@ $today = date('Y-m-d');
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script>
-    // NEW: JS for Approve - grabs date from Scheduled column input and submits dynamically
     function approveApplication(appId) {
       var dateInput = document.getElementById('exam_date_' + appId);
       var examDate = dateInput.value.trim();
@@ -202,18 +185,15 @@ $today = date('Y-m-d');
         return false;
       }
 
-      // Client-side format check (YYYY-MM-DD)
       if (!/^\d{4}-\d{2}-\d{2}$/.test(examDate)) {
         alert('Invalid date format. Please select from the calendar.');
         return false;
       }
 
-      // Create and submit dynamic form
       var form = document.createElement('form');
       form.method = 'POST';
       form.style.display = 'none';
 
-      // Hidden fields
       var inputAppId = document.createElement('input');
       inputAppId.type = 'hidden';
       inputAppId.name = 'application_id';

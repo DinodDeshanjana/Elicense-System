@@ -135,13 +135,11 @@ $conn->close();
               </td>
               <td>
                 <?php if ($user['role'] === 'user'): ?>
-                  <!-- Show Delete button only for regular users -->
                   <form action="manageusers.php" method="POST" onsubmit="return confirm('Are you sure you want to delete this user? This action cannot be undone.');">
                     <input type="hidden" name="user_id" value="<?php echo $user['user_id']; ?>">
                     <button type="submit" name="delete_user" class="btn btn-danger btn-sm">Delete</button>
                   </form>
                 <?php else: ?>
-                  <!-- Admins are protected -->
                   <button class="btn btn-secondary btn-sm" disabled>Protected</button>
                 <?php endif; ?>
               </td>

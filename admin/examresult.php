@@ -17,22 +17,16 @@ if ($_SESSION['role'] !== 'admin') {
 }
 
 
-// --- MODIFICATION 1: SIMPLIFY FORM HANDLING ---
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_result'])) {
     $application_id = $_POST['application_id'];
-    // $exam_date variable is removed
     $result_status = $_POST['result'];
 
-    // Updated validation
     if (empty($application_id) || empty($result_status)) {
         $_SESSION['error_message'] = "A result must be selected to save.";
     } else {
         
-        // --- MODIFICATION 2: USE CURDATE() in SQL ---
-        // The query now automatically saves the current date as the exam_date
         $sql = "INSERT INTO exam_results (application_id, exam_date, result) VALUES (?, CURDATE(), ?)";
         $stmt = $conn->prepare($sql);
-        // The bind_param is updated to match the new query (integer, string)
         $stmt->bind_param("is", $application_id, $result_status);
 
         if ($stmt->execute()) {
@@ -52,13 +46,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_result'])) {
 }
 
 
-// --- MODIFICATION 3: SIMPLIFY DATA FETCHING ---
 $applicants = [];
 $sql = "SELECT 
             ea.application_id,
             u.fullname,
             er.result,
-            er.exam_date -- Still fetch the date to display for already saved results
+            er.exam_date
         FROM 
             exam_applications AS ea
         JOIN 
@@ -121,7 +114,6 @@ $conn->close();
     <div class="table-responsive bg-white shadow rounded p-3">
       <table class="table table-hover align-middle">
         <thead class="table-primary">
-          <!-- MODIFICATION 4: REMOVE EXAM DATE HEADER -->
           <tr>
             <th>App ID</th>
             <th>User Name</th>
@@ -144,8 +136,7 @@ $conn->close();
                   </td>
                   <td><?php echo htmlspecialchars($applicant['fullname']); ?></td>
                   
-                  <?php if (is_null($applicant['result'])): // If result is not yet saved ?>
-                    <!-- The date input field is now completely removed -->
+                  <?php if (is_null($applicant['result'])): ?>
                     <td>
                       <select name="result" class="form-select form-select-sm" style="width:120px;" required>
                         <option value="" disabled selected>Select...</option>
@@ -156,7 +147,7 @@ $conn->close();
                     <td>
                       <button type="submit" name="save_result" class="btn btn-primary btn-sm">Save</button>
                     </td>
-                  <?php else: // If result is already saved ?>
+                  <?php else:  ?>
                     <td>
                       <?php
                         $result_status = htmlspecialchars($applicant['result']);
