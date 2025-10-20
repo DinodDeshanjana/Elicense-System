@@ -1,35 +1,24 @@
 <?php
-/**
- * E-License System | License Status
- *
- * - Fetches and displays the final license status for the logged-in user.
- * - Shows the status (Processing, Ready for Collection, Collected).
- * - Protected page: only accessible to logged-in users.
- */
 
-// Must be the very first line to use sessions
+
 session_start();
 
-// Check if the user is logged in. If not, redirect to the login page.
 if (!isset($_SESSION['user_id'])) {
     $_SESSION['error_message'] = "Please log in to view your license status.";
     header("Location: login.php");
     exit();
 }
 
-// Include the database connection file.
 require 'dbconnection.php';
 
-// Get the logged-in user's ID
 $user_id = $_SESSION['user_id'];
 
-// Fetch the latest license status for this user from the database
 $license = null;
 $sql = "SELECT license_id, issue_date, status 
         FROM licenses 
         WHERE user_id = ? 
         ORDER BY issue_date DESC 
-        LIMIT 1"; // Get the most recent license record
+        LIMIT 1"; 
 
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("i", $user_id);
@@ -57,7 +46,7 @@ body {
   font-family: 'Poppins', sans-serif;
   min-height: 100vh;
   position: relative;
-  padding-bottom: 80px; /* Adjust based on footer height */
+  padding-bottom: 80px; 
 }
 
 footer {
@@ -85,7 +74,6 @@ footer {
     <h3 class="text-center text-primary mb-3">Your License Status</h3>
     <p class="text-center text-muted mb-4">View if your driving license is ready for collection.</p>
 
-    <!-- Dynamic Status Display -->
     <div class="mt-4">
         <?php if ($license): ?>
             <?php

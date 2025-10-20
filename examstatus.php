@@ -1,29 +1,18 @@
 <?php
-/**
- * E-License System | Exam Application Status
- *
- * - Fetches and displays all exam applications for the logged-in user.
- * - Shows the status and the scheduled exam date if approved.
- */
 
-// Must be the very first line to use sessions
 session_start();
 
-// Check if the user is logged in. If not, redirect to the login page.
 if (!isset($_SESSION['user_id'])) {
     $_SESSION['error_message'] = "Please log in to view your application status.";
     header("Location: login.php");
     exit();
 }
 
-// Include the database connection file.
-require 'dbconnection.php'; // Corrected filename
+require 'dbconnection.php'; 
 
-// Get the logged-in user's ID
 $user_id = $_SESSION['user_id'];
 
-// --- MODIFICATION 1: UPDATE SQL QUERY ---
-// Fetch all exam applications for this user, including the new scheduled_exam_date
+
 $applications = [];
 $sql = "SELECT application_id, exam_type, applied_date, scheduled_exam_date, status 
         FROM exam_applications 
@@ -57,7 +46,7 @@ $conn->close();
       font-family: 'Poppins', sans-serif;
       min-height: 100vh;
       position: relative;
-      padding-bottom: 80px; /* Adjust based on footer height */
+      padding-bottom: 80px; 
     }
     .card {
       border: none;
@@ -96,7 +85,6 @@ $conn->close();
             <th>Application ID</th>
             <th>Exam Type</th>
             <th>Date Applied</th>
-            <!-- MODIFICATION 2: ADD NEW TABLE HEADER -->
             <th>Scheduled Exam Date</th>
             <th>Status</th>
           </tr>
@@ -104,7 +92,6 @@ $conn->close();
         <tbody>
           <?php if (empty($applications)): ?>
             <tr>
-              <!-- MODIFICATION 3: INCREASE COLSPAN -->
               <td colspan="5" class="text-center text-muted p-4">You have not submitted any applications yet.</td>
             </tr>
           <?php else: ?>
@@ -113,21 +100,17 @@ $conn->close();
                 <td><?php echo 'APP-' . htmlspecialchars($app['application_id']); ?></td>
                 <td><?php echo htmlspecialchars(ucfirst($app['exam_type'])); ?></td>
                 <td><?php echo htmlspecialchars($app['applied_date']); ?></td>
-                <!-- MODIFICATION 4: DISPLAY THE SCHEDULED DATE -->
                 <td>
                     <?php 
                       if ($app['scheduled_exam_date']) {
-                          // If a date exists, display it
                           echo htmlspecialchars($app['scheduled_exam_date']);
                       } else {
-                          // If no date (NULL), show N/A
                           echo '<span class="text-muted">N/A</span>';
                       }
                     ?>
                 </td>
                 <td>
                   <?php
-                    // Set a different badge color based on the status
                     $status = htmlspecialchars($app['status']);
                     $badge_class = '';
                     switch ($status) {

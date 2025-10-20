@@ -1,30 +1,17 @@
 <?php
-/**
- * E-License System | View Exam Results
- *
- * - Fetches and displays all exam results for the logged-in user.
- * - Joins 'exam_results' and 'exam_applications' tables.
- * - Shows results (Pass, Fail, Pending) with color-coded badges.
- * - Protected page: only accessible to logged-in users.
- */
 
-// Must be the very first line to use sessions
 session_start();
 
-// Check if the user is logged in. If not, redirect to the login page.
 if (!isset($_SESSION['user_id'])) {
     $_SESSION['error_message'] = "Please log in to view your exam results.";
     header("Location: login.php");
     exit();
 }
 
-// Include the database connection file.
 require 'dbconnection.php';
 
-// Get the logged-in user's ID
 $user_id = $_SESSION['user_id'];
 
-// Fetch all exam results for this user by joining the tables
 $results = [];
 $sql = "SELECT 
             er.exam_date,
@@ -62,7 +49,7 @@ body {
   font-family: 'Poppins', sans-serif;
   min-height: 100vh;
   position: relative;
-  padding-bottom: 80px; /* Adjust based on footer height */
+  padding-bottom: 80px;
 }
 
 footer {
