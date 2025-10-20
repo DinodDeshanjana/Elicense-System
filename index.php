@@ -94,7 +94,7 @@ session_start();
         transform: translateY(-2px);
       }
 
-      /* SCROLL ANIMATIONS */
+
       .fade-in {
         opacity: 0;
         transform: translateY(30px);
@@ -150,7 +150,6 @@ session_start();
         transform: scale(1);
       }
 
-      /* Stagger animation for cards */
       .card-item {
         transition-delay: 0s;
       }
@@ -187,17 +186,18 @@ session_start();
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav ms-auto">
             <li class="nav-item">
-              <a class="nav-link" href="#home">Home</a>
+              <a class="nav-link" href="index.php">Home</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#services">Services</a>
+              <a class="nav-link" href="services.php">Services</a>
             </li>
              <li class="nav-item">
-              <a class="nav-link" href="#contact">Contact</a>
+              <a class="nav-link" href="contact.php">Contact</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#about">About Us</a>
+              <a class="nav-link" href="about.php">About Us</a>
             </li>
+         
           </ul>
           
          
@@ -206,8 +206,11 @@ session_start();
               <?php
                 
                 $dashboard_link = ($_SESSION['role'] === 'admin') ? 'admin_dashboard.php' : 'dashboard.php';
+                $profile = ($_SESSION['role']== 'admin') ? 'admin_dashboard.php' : 'profile.php';
               ?>
+              <a href="<?php echo $profile; ?>" class="btn btn-light">My Profile</a>
               <a href="<?php echo $dashboard_link; ?>" class="btn btn-light">My Dashboard</a>
+              
               <a href="logout.php" class="btn-logout btn-login">Logout</a>
             <?php else: ?>
               <a href="login.php" class="btn btn-login">Login</a>
@@ -247,7 +250,7 @@ session_start();
                   digital solutions.
                 </p>
                 <div class="d-flex flex-wrap gap-3">
-                  <a href="register.php" class="btn btn-light btn-lg">Get Started</a>
+                  <a href="applyexam.php" class="btn btn-light btn-lg">Get Started</a>
                   <a href="#services" class="btn btn-outline-light btn-lg">Learn More</a>
                 </div>
             </div>
@@ -264,7 +267,7 @@ session_start();
       <div class="container">
           <div class="row text-center mb-5">
               <div class="col-lg-8 mx-auto fade-in">
-                  <h2 class="h1 mb-3">Our Services</h2>
+                  <h2 class="fw-bold mb-4">Our Services</h2>
                   <p class="lead text-muted">Comprehensive resources for your driving license journey.</p>
               </div>
           </div>
@@ -289,7 +292,7 @@ session_start();
                           <i class="bi bi-book-half text-primary" style="font-size: 2.5rem;"></i>
                           <h5 class="card-title mt-3">Written Exam Guide</h5>
                           <p class="card-text">Prepare for the computer test with our study materials and practice questions.</p>
-                           <a href="#" class="btn btn-outline-secondary mt-auto disabled">Coming Soon</a>
+                           <a href="examguid.php" class="btn btn-primary mt-auto">Start Studying</a>
                       </div>
                   </div>
               </div>
@@ -301,7 +304,7 @@ session_start();
                           <i class="bi bi-shield-check text-primary" style="font-size: 2.5rem;"></i>
                           <h5 class="card-title mt-3">Safety Guidelines</h5>
                           <p class="card-text">Access essential road safety rules and best practices for new drivers.</p>
-                          <a href="#" class="btn btn-outline-secondary mt-auto disabled">Coming Soon</a>
+                          <a href="safetyGuidelines.php" class="btn btn-primary mt-auto">Learn Safety</a>
                       </div>
                   </div>
               </div>
@@ -361,7 +364,6 @@ session_start();
 
    
     <script>
-      // Smooth scroll navigation
       document.addEventListener('DOMContentLoaded', function() {
         const navLinks = document.querySelectorAll('a.nav-link[href^="#"]');
         
@@ -385,7 +387,6 @@ session_start();
         }
       });
 
-      // Scroll animations with Intersection Observer
       const observerOptions = {
         threshold: 0.1,
         rootMargin: '0px 0px -50px 0px'
@@ -401,7 +402,6 @@ session_start();
         });
       }, observerOptions);
 
-      // Observe all animated elements
       document.querySelectorAll('.fade-in, .slide-in-left, .slide-in-right, .scale-up, .zoom-in, .card-item').forEach(el => {
         observer.observe(el);
       });
