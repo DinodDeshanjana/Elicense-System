@@ -32,8 +32,7 @@ session_start();
         --light-blue: #e3f2fd;
       }
 
-      * { margin: 0; padding: 0; box-sizing: border-box;
-    ``}
+      * { margin: 0; padding: 0; box-sizing: border-box; }
       body { 
         font-family: 'Poppins', sans-serif;
         overflow-x: hidden; 
@@ -62,42 +61,112 @@ session_start();
       .service-card:hover { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
       .btn-login a, .btn-light a { text-decoration: none !important; color: inherit; }
       
-      
       html {
         scroll-behavior: smooth;
       }
       
-     
       section {
         scroll-margin-top: 80px;
       }
       
- 
       .styled-image {
         max-width: 100%;
         height: auto;
-       
       }
-        .navbar-brand i {
-      margin-right: 0.5rem;
-      color: #007bff;
-    }
-    .btn-logout {
-      background-color: #dc3545;
-      color: white;
-      font-weight: bold;
-      padding: 0.5rem 1.5rem;
-      border-radius: 50px;
-      transition: all 0.3s ease;
-      border: none;
-      text-decoration: none; 
-      display: inline-block;
-    }
-        .btn-logout:hover {
-      background-color: #c82333;
-      color: white;
-      transform: translateY(-2px);
-    }
+      .navbar-brand i {
+        margin-right: 0.5rem;
+        color: #007bff;
+      }
+      .btn-logout {
+        background-color: #dc3545;
+        color: white;
+        font-weight: bold;
+        padding: 0.5rem 1.5rem;
+        border-radius: 50px;
+        transition: all 0.3s ease;
+        border: none;
+        text-decoration: none; 
+        display: inline-block;
+      }
+      .btn-logout:hover {
+        background-color: #c82333;
+        color: white;
+        transform: translateY(-2px);
+      }
+
+      /* SCROLL ANIMATIONS */
+      .fade-in {
+        opacity: 0;
+        transform: translateY(30px);
+        transition: opacity 0.8s ease, transform 0.8s ease;
+      }
+
+      .fade-in.visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .slide-in-left {
+        opacity: 0;
+        transform: translateX(-50px);
+        transition: opacity 0.8s ease, transform 0.8s ease;
+      }
+
+      .slide-in-left.visible {
+        opacity: 1;
+        transform: translateX(0);
+      }
+
+      .slide-in-right {
+        opacity: 0;
+        transform: translateX(50px);
+        transition: opacity 0.8s ease, transform 0.8s ease;
+      }
+
+      .slide-in-right.visible {
+        opacity: 1;
+        transform: translateX(0);
+      }
+
+      .scale-up {
+        opacity: 0;
+        transform: scale(0.9);
+        transition: opacity 0.8s ease, transform 0.8s ease;
+      }
+
+      .scale-up.visible {
+        opacity: 1;
+        transform: scale(1);
+      }
+
+      .zoom-in {
+        opacity: 0;
+        transform: scale(0.8);
+        transition: opacity 0.8s ease, transform 0.8s ease;
+      }
+
+      .zoom-in.visible {
+        opacity: 1;
+        transform: scale(1);
+      }
+
+      /* Stagger animation for cards */
+      .card-item {
+        transition-delay: 0s;
+      }
+
+      .card-item:nth-child(1).visible {
+        transition-delay: 0s;
+      }
+
+      .card-item:nth-child(2).visible {
+        transition-delay: 0.15s;
+      }
+
+      .card-item:nth-child(3).visible {
+        transition-delay: 0.3s;
+      }
+
     </style>
 
   </head>
@@ -156,7 +225,7 @@ session_start();
         <div class="row align-items-center">
          
           <?php if (isset($_SESSION['user_id'])): ?>
-            <div class="col-lg-6">
+            <div class="col-lg-6 slide-in-left">
                 <h1 class="display-4 fw-bold mb-4">
                   Welcome back,<br/><?php echo htmlspecialchars($_SESSION['fullname']); ?>!
                 </h1>
@@ -168,7 +237,7 @@ session_start();
                 </div>
             </div>
           <?php else: ?>
-            <div class="col-lg-6">
+            <div class="col-lg-6 slide-in-left">
                 <h1 class="display-4 fw-bold mb-4">
                   Streamlined Motor Traffic Services
                 </h1>
@@ -184,7 +253,7 @@ session_start();
             </div>
           <?php endif; ?>
           
-          <div class="col-lg-6 text-center">
+          <div class="col-lg-6 text-center zoom-in">
             <img src="image01.png" alt="E-License Services Illustration" class="styled-image" width="390">
           </div>
         </div>
@@ -194,7 +263,7 @@ session_start();
     <section id="services" class="py-5 bg-light">
       <div class="container">
           <div class="row text-center mb-5">
-              <div class="col-lg-8 mx-auto">
+              <div class="col-lg-8 mx-auto fade-in">
                   <h2 class="h1 mb-3">Our Services</h2>
                   <p class="lead text-muted">Comprehensive resources for your driving license journey.</p>
               </div>
@@ -202,7 +271,7 @@ session_start();
         
           <div class="row g-4 justify-content-center">
           
-              <div class="col-md-6 col-lg-4">
+              <div class="col-md-6 col-lg-4 card-item fade-in">
                   <div class="card service-card h-100">
                       <div class="card-body text-center p-4 d-flex flex-column">
                           <i class="bi bi-person-badge text-primary" style="font-size: 2.5rem;"></i>
@@ -214,7 +283,7 @@ session_start();
               </div>
               
               
-              <div class="col-md-6 col-lg-4">
+              <div class="col-md-6 col-lg-4 card-item fade-in">
                   <div class="card service-card h-100">
                        <div class="card-body text-center p-4 d-flex flex-column">
                           <i class="bi bi-book-half text-primary" style="font-size: 2.5rem;"></i>
@@ -226,7 +295,7 @@ session_start();
               </div>
 
           
-              <div class="col-md-6 col-lg-4">
+              <div class="col-md-6 col-lg-4 card-item fade-in">
                   <div class="card service-card h-100">
                        <div class="card-body text-center p-4 d-flex flex-column">
                           <i class="bi bi-shield-check text-primary" style="font-size: 2.5rem;"></i>
@@ -242,32 +311,36 @@ session_start();
 
     <section class="py-5" id="about">
       <div class="container text-center">
-        <h2 class="fw-bold mb-4">About Us</h2>
-        <p class="lead text-muted mx-auto" style="max-width: 800px;">
-          The Department of Motor Traffic is responsible for licensing, road safety enforcement, and vehicle inspections.
-          Through the E-License system, these services are made simpler and faster for all citizens.
-        </p>
+        <div class="fade-in">
+          <h2 class="fw-bold mb-4">About Us</h2>
+          <p class="lead text-muted mx-auto" style="max-width: 800px;">
+            The Department of Motor Traffic is responsible for licensing, road safety enforcement, and vehicle inspections.
+            Through the E-License system, these services are made simpler and faster for all citizens.
+          </p>
+        </div>
       </div>
     </section>
 
     <section class="py-5 bg-light" id="contact">
       <div class="container text-center">
-        <h2 class="fw-bold mb-4">Contact Us</h2>
-        <p class="lead text-muted mx-auto" style="max-width: 800px;">
-          Have questions or need assistance? Reach out to our support team for help with your E-License needs.
-        </p>
+        <div class="fade-in">
+          <h2 class="fw-bold mb-4">Contact Us</h2>
+          <p class="lead text-muted mx-auto" style="max-width: 800px;">
+            Have questions or need assistance? Reach out to our support team for help with your E-License needs.
+          </p>
+        </div>
         <div class="row mt-5">
-          <div class="col-md-4">
+          <div class="col-md-4 card-item fade-in">
             <i class="bi bi-geo-alt-fill text-primary" style="font-size: 2rem;"></i>
             <h5 class="mt-3">Address</h5>
             <p>Department of Motor Traffic<br>Colombo, Sri Lanka</p>
           </div>
-          <div class="col-md-4">
+          <div class="col-md-4 card-item fade-in">
             <i class="bi bi-telephone-fill text-primary" style="font-size: 2rem;"></i>
             <h5 class="mt-3">Phone</h5>
             <p>+94 11 123 4567</p>
           </div>
-          <div class="col-md-4">
+          <div class="col-md-4 card-item fade-in">
             <i class="bi bi-envelope-fill text-primary" style="font-size: 2rem;"></i>
             <h5 class="mt-3">Email</h5>
             <p>support@e-license.gov.lk</p>
@@ -288,8 +361,8 @@ session_start();
 
    
     <script>
+      // Smooth scroll navigation
       document.addEventListener('DOMContentLoaded', function() {
-      
         const navLinks = document.querySelectorAll('a.nav-link[href^="#"]');
         
         for (let link of navLinks) {
@@ -300,7 +373,6 @@ session_start();
             const targetElement = document.querySelector(targetId);
             
             if (targetElement) {
-             
               const navbarHeight = document.querySelector('.navbar').offsetHeight;
               const targetPosition = targetElement.offsetTop - navbarHeight;
               
@@ -311,6 +383,27 @@ session_start();
             }
           });
         }
+      });
+
+      // Scroll animations with Intersection Observer
+      const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+      };
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          } else {
+            entry.target.classList.remove('visible');
+          }
+        });
+      }, observerOptions);
+
+      // Observe all animated elements
+      document.querySelectorAll('.fade-in, .slide-in-left, .slide-in-right, .scale-up, .zoom-in, .card-item').forEach(el => {
+        observer.observe(el);
       });
     </script>
 
