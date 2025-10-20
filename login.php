@@ -1,17 +1,8 @@
 <?php
-/**
- * E-License System | User Login
- *
- * This script handles the user authentication process.
- * **CORRECTED VERSION:** Redirects users based on their role.
- */
 
-// Must be the very first line to use sessions
 session_start();
 
-// If the user is already logged in, redirect them to the correct dashboard.
 if (isset($_SESSION['user_id'])) {
-    // --- MODIFICATION 1: CHECK ROLE ON EXISTING SESSION ---
     if ($_SESSION['role'] === 'admin') {
         header("Location: admin_dashboard.php");
     } else {
@@ -20,21 +11,16 @@ if (isset($_SESSION['user_id'])) {
     exit();
 }
 
-// Include the database connection file.
-require 'dbconnection.php'; // Corrected filename assuming it's db_connection.php
+require 'dbconnection.php'; 
 
-// --- FORM PROCESSING LOGIC ---
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-    // 1. Retrieve and trim input data
     $email    = trim($_POST['email']);
     $password = $_POST['password'];
 
-    // 2. Server-side Validation
     if (empty($email) || empty($password)) {
         $_SESSION['error_message'] = "Both email and password are required.";
     } else {
-        // 3. Prepare and execute the query to find the user by email
         $sql = "SELECT user_id, fullname, password, role FROM users WHERE email = ?";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("s", $email);
@@ -42,40 +28,33 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $result = $stmt->get_result();
 
         if ($result->num_rows === 1) {
-            // User found, now verify the password
             $user = $result->fetch_assoc();
             
-            // 4. Verify the hashed password
             if (password_verify($password, $user['password'])) {
-                // Password is correct, login successful.
                 
-                // 5. Store user data in the session
-                session_regenerate_id(true); // Prevents session fixation attacks
+                session_regenerate_id(true); 
                 $_SESSION['user_id']  = $user['user_id'];
                 $_SESSION['fullname'] = $user['fullname'];
                 $_SESSION['role']     = $user['role'];
                 
-                // --- MODIFICATION 2: REDIRECT BASED ON ROLE ---
-                // Check the user's role and redirect to the appropriate dashboard.
                 if ($user['role'] === 'admin') {
                     header("Location: admin/admin.php");
                 } else {
                     header("Location: dashboard.php");
                 }
-                exit(); // Important to exit after redirection
+                exit(); 
 
             } else {
-                // Password is not correct
                 $_SESSION['error_message'] = "Invalid email or password. Please try again.";
             }
         } else {
-            // No user found with that email
+
             $_SESSION['error_message'] = "Invalid email or password. Please try again.";
         }
         $stmt->close();
     }
     
-    // If there was an error, redirect back to this page to show it.
+    
     if(isset($_SESSION['error_message'])){
         header("Location: login.php");
         exit();
@@ -91,6 +70,10 @@ $conn->close();
   <title>E-License | Login</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
       --primary-blue: #0d6efd;
@@ -118,21 +101,17 @@ $conn->close();
         <p class="text-muted">Login to manage your E-License</p>
       </div>
 
-      <!-- Message Display Area -->
       <?php
-      // Display success message from registration
       if (isset($_SESSION['success_message'])) {
           echo '<div class="alert alert-success" role="alert">' . $_SESSION['success_message'] . '</div>';
-          unset($_SESSION['success_message']); // Clear message after displaying
+          unset($_SESSION['success_message']); 
       }
-      // Display error message from failed login attempt
       if (isset($_SESSION['error_message'])) {
           echo '<div class="alert alert-danger" role="alert">' . $_SESSION['error_message'] . '</div>';
-          unset($_SESSION['error_message']); // Clear message after displaying
+          unset($_SESSION['error_message']); 
       }
       ?>
 
-      <!-- Login Form -->
       <form action="login.php" method="POST">
         <div class="mb-3">
           <label class="form-label fw-semibold">Email Address</label>
@@ -153,7 +132,6 @@ $conn->close();
         </div>
       </form>
       <div class="text-center mt-3 back-link">
-        <!-- MODIFICATION 3: Corrected link to index.php -->
         <a href="index.php" class="mb-0 text-decoration-none"><i class="bi bi-arrow-left-circle"></i> Back to Home</a>
       </div>
     </div>
