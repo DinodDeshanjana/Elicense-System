@@ -1,14 +1,5 @@
 <?php
-/**
- * E-License System | User Dashboard
- *
- * This is the main page for logged-in users.
- * It provides navigation to all user-specific functionalities.
- */
 
-
-
-// Get the user's name from the session variable to display it
 $fullname = isset($_SESSION['fullname']) ? htmlspecialchars($_SESSION['fullname']) : "User";
 
 ?>
@@ -18,9 +9,9 @@ $fullname = isset($_SESSION['fullname']) ? htmlspecialchars($_SESSION['fullname'
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>E-License | User Dashboard</title>
-  <!-- Bootstrap CSS -->
+
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-  <!-- Icons -->
+
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -65,8 +56,8 @@ $fullname = isset($_SESSION['fullname']) ? htmlspecialchars($_SESSION['fullname'
       border-radius: 50px;
       transition: all 0.3s ease;
       border: none;
-      text-decoration: none; /* remove underline from link */
-      display: inline-block; /* correct alignment */
+      text-decoration: none; 
+      display: inline-block; 
     }
     .btn-logout:hover {
       background-color: #c82333;
@@ -78,7 +69,7 @@ $fullname = isset($_SESSION['fullname']) ? htmlspecialchars($_SESSION['fullname'
 </head>
 <body>
 
-  <!-- Navbar -->
+ 
   <nav class="navbar navbar-expand-lg sticky-top">
     <div class="container">
       <a class="navbar-brand" href="index.php">
@@ -99,7 +90,7 @@ $fullname = isset($_SESSION['fullname']) ? htmlspecialchars($_SESSION['fullname'
             <a class="nav-link" href="#">Profile</a>
           </li>
         </ul>
-        <!-- Correct logout button -->
+
         <a href="logout.php" class="btn-logout ms-3">Logout</a>
       </div>
     </div>
@@ -108,7 +99,6 @@ $fullname = isset($_SESSION['fullname']) ? htmlspecialchars($_SESSION['fullname'
 
   
 
-  <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
