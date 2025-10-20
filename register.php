@@ -12,7 +12,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $password   = $_POST['password'];
     $id = trim($_POST['nic']);
 
-    // 2. Server-side Validation
     if (empty($fullname) || empty($email) || empty($contact_no) || empty($password) || empty($id)) {
         $_SESSION['error_message'] = "All fields are required. Please fill out the entire form.";
     } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
