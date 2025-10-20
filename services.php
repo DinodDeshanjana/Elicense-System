@@ -136,8 +136,11 @@ session_start();
               <?php
                 
                 $dashboard_link = ($_SESSION['role'] === 'admin') ? 'admin_dashboard.php' : 'dashboard.php';
+                $profile = ($_SESSION['role']== 'admin') ? 'admin_dashboard.php' : 'profile.php';
               ?>
+              <a href="<?php echo $profile; ?>" class="btn btn-light">My Profile</a>
               <a href="<?php echo $dashboard_link; ?>" class="btn btn-light">My Dashboard</a>
+              
               <a href="logout.php" class="btn-logout btn-login">Logout</a>
             <?php else: ?>
               <a href="login.php" class="btn btn-login">Login</a>
