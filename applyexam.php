@@ -145,7 +145,7 @@ footer {
         </select>
       </div>
       <div class="text-center mt-4">
-        <button type="submit" class="btn btn-custom px-5">Submit Application</button>
+        <button type="submit" class="btn btn-primary px-5">Submit Application</button>
       </div>
     </form>
      <div class="text-center mt-3">
