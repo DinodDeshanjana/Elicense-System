@@ -118,7 +118,7 @@ $conn->close();
         <div class="row">
           <div class="col-md-6 mb-3">
             <label class="form-label fw-semibold">ID Number (NIC)</label>
-            <input type="text" name="nic" class="form-control" placeholder="123456789ABC" required>
+            <input type="text" name="nic" class="form-control" placeholder="Enter Your NIC Number" required>
           </div>
           <div class="col-md-6 mb-3">
             <label class="form-label fw-semibold">Contact Number</label>
