@@ -1,23 +1,13 @@
 <?php
-/**
- * E-License System | User Dashboard
- *
- * This is the main page for logged-in users.
- * It provides navigation to all user-specific functionalities.
- */
 
-// Must be the very first line to use sessions
 session_start();
 
-// Check if the user is logged in. If not, redirect to the login page.
 if (!isset($_SESSION['user_id'])) {
-    // Set a message to inform the user why they were redirected
     $_SESSION['error_message'] = "Please log in to access your dashboard.";
     header("Location: login.php");
     exit();
 }
 
-// Get the user's name from the session variable to display it
 $fullname = isset($_SESSION['fullname']) ? htmlspecialchars($_SESSION['fullname']) : "User";
 
 ?>
@@ -27,9 +17,7 @@ $fullname = isset($_SESSION['fullname']) ? htmlspecialchars($_SESSION['fullname'
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>E-License | User Dashboard</title>
-  <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-  <!-- Icons -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -42,7 +30,7 @@ $fullname = isset($_SESSION['fullname']) ? htmlspecialchars($_SESSION['fullname'
   font-family: 'Poppins', sans-serif;
   min-height: 100vh;
   position: relative;
-  padding-bottom: 80px; /* Adjust based on footer height */
+  padding-bottom: 80px;
 }
 
 footer {
@@ -83,8 +71,8 @@ footer {
       border-radius: 50px;
       transition: all 0.3s ease;
       border: none;
-      text-decoration: none; /* remove underline from link */
-      display: inline-block; /* correct alignment */
+      text-decoration: none; 
+      display: inline-block; 
     }
     .btn-logout:hover {
       background-color: #c82333;
@@ -110,11 +98,11 @@ footer {
 
  <?php include "usernavigation.php"; ?>
 
-  <!-- Dashboard -->
+
   <div class="container py-5">
     <h2 class="mb-4 fw-semibold text-center text-primary">Welcome, <?php echo $fullname; ?>!</h2>
     
-    <!-- Message Display Area -->
+   
     <?php
     if (isset($_SESSION['success_message'])) {
         echo '<div class="alert alert-success alert-dismissible fade show col-md-8 mx-auto" role="alert">' . $_SESSION['success_message'] . '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>';
@@ -124,7 +112,7 @@ footer {
 
     <div class="row g-4 mt-2">
 
-      <!-- Apply for Exam -->
+ 
       <div class="col-md-3">
         <div class="card text-center p-4 h-100">
           <i class="bi bi-journal-check mb-3"></i>
@@ -134,7 +122,7 @@ footer {
         </div>
       </div>
 
-      <!-- View Exam Status -->
+
       <div class="col-md-3">
         <div class="card text-center p-4 h-100">
           <i class="bi bi-eye-fill mb-3"></i>
@@ -144,7 +132,7 @@ footer {
         </div>
       </div>
 
-      <!-- View Results -->
+
       <div class="col-md-3">
         <div class="card text-center p-4 h-100">
           <i class="bi bi-bar-chart-line-fill mb-3"></i>
@@ -154,7 +142,7 @@ footer {
         </div>
       </div>
 
-      <!-- License Availability -->
+
       <div class="col-md-3">
         <div class="card text-center p-4 h-100">
           <i class="bi bi-card-checklist mb-3"></i>
@@ -173,7 +161,7 @@ footer {
     </div>
   </footer>
 
-  <!-- Bootstrap JS -->
+
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
