@@ -84,10 +84,20 @@ $fullname = isset($_SESSION['fullname']) ? htmlspecialchars($_SESSION['fullname'
             <a class="nav-link active" href="index.php">Home</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link active" href="dashboard.php">My Dashboard</a>
+              <a class="nav-link" href="services.php">Services</a>
+            </li>
+             <li class="nav-item">
+              <a class="nav-link" href="contact.php">Contact</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="about.php">About Us</a>
+            </li>
+          
+          <li class="nav-item">
+            <a class="nav-link" href="profile.php">Profile</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">Profile</a>
+            <a class="nav-link active" href="dashboard.php">My Dashboard</a>
           </li>
         </ul>
 
