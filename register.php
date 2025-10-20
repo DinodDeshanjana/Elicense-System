@@ -87,6 +87,7 @@ $conn->close();
     .box-area {
       border-radius: 12px;
     }
+    
   </style>
 </head>
 <body class="register-body">
@@ -111,7 +112,7 @@ $conn->close();
         
         <div class="mb-3">
           <label class="form-label fw-semibold">Full Name</label>
-          <input type="text" name="fullname" class="form-control" placeholder="John Doe" required>
+          <input type="text" name="fullname" class="form-control" placeholder="Enter Your Full Name" required>
         </div>
 
         <div class="row">
@@ -125,16 +126,15 @@ $conn->close();
           </div>
         </div>
         
-        <div class="row">
-          <div class="col-md-6 mb-3">
-            <label class="form-label fw-semibold">Email Address</label>
-           <input type="email" name="email" class="form-control" placeholder="you@example.com" required>
-          </div>
-          <div class="col-md-6 mb-3">
-          <label class="form-label fw-semibold">Password</label>
-          <input type="password" name="password" class="form-control" placeholder="Enter a secure password" required>
-          </div>
-        </div>
+     <div class="mb-3">
+        <label class="form-label fw-semibold">Email Address</label>
+       <input type="email" name="email" class="form-control" placeholder="you@example.com" required>
+      </div>
+      
+      <div class="mb-3">
+      <label class="form-label fw-semibold">Password</label>
+      <input type="password" name="password" class="form-control" placeholder="Enter a secure password" required>
+      </div>
 
         <div class="d-grid mt-3">
           <button type="submit" class="btn btn-warning fw-bold">Register Now</button>
