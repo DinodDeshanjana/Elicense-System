@@ -47,7 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_user'])) {
     }
 
 
-    header("Location: manageusers.php.php");
+    header("Location: manageusers.php");
     exit();
 }
 
