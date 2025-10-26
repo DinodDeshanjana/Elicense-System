@@ -123,12 +123,13 @@ session_start();
             <li class="nav-item">
               <a class="nav-link" href="services.php">Services</a>
             </li>
+              <li class="nav-item">
+              <a class="nav-link" href="about.php">About Us</a>
+            </li>
              <li class="nav-item">
               <a class="nav-link" href="contact.php">Contact</a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href="about.php">About Us</a>
-            </li>
+          
           </ul>
          
           <div class="ms-3 d-flex gap-2">
